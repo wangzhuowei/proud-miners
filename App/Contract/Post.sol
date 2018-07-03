@@ -10,14 +10,18 @@ contract Post{
 		uint[] auctionIds;	
 		uint[] applicationIds;
 		uint postTime;
-		uint expireTime;  //max value available
-		uint noOfOffer; // number of persons hired
+		uint duration; //max value available
+		uint noOfSlots; // number of persons hired
+		uint noOfOffers;
+		uint noOfOffersAccepted;
+
 	}
 
 	Post[] posts; //all the posts in this app
+	mapping (uint =>) openPosts;
 	
-	//retrieve all posts for job dashboard
+	//retrieve all posts for job board
 	function _retrieveAllPosts () returns(Post[]) {
-		return posts;
+		return openPosts;
 	}	
 }

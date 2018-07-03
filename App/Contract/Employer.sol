@@ -8,23 +8,20 @@ import "./ownable.sol";
 
 
 contract Employers is ownable{
-	//Employer[] employers;
 	mapping (address => Employer) addToEmployer;   
-    mapping (address => uint[]) employerToPosts; //employer address map to postIds(unit[]) 
+    mapping (address => uint[]) employerToPosts; 
 
 	//strut for employer
 	struct Employer{
 		address ownerAdd; 
-		mapping (uint => Auction[]) postIdToAuctions;
-        mapping (uint => Application[]) postIdToApplications;  
+		//mapping (uint => Auction[]) postIdToAuctions;
+        //mapping (uint => Application[]) postIdToApplications;  
     }
 
 	//=================acct management start=============================
     function _createEmployer() internal {
-    	require(addToEmployer[msg.sender].length==0); 
-        mapping (uint => Auction[]) postIdToAuctions;
-        mapping (uint => Application[]) postIdToApplications;  
-        addToEmployer[msg.sender]=Employer(msg.sender,postIdToAuctions,postIdToApplications);
+    	require(addToEmployer[msg.sender].length==0);  
+        addToEmployer[msg.sender]=Employer(msg.sender);
         uint[] emptyPostIds;
         employerToPosts[msg.sender]=emptyPostIds;
     }
@@ -32,34 +29,22 @@ contract Employers is ownable{
 
 	//===============employers CRUD operation on posts starts================
 
-    //create post without expireTime
-	function createPost(string _postContent, uint _noOfOffer) {
-		require(addToEmployer[msg.sender].length!=0);
-		uint postId = posts.length+1;
-		uint expireTime;//how to calculate expireTime based on startTime?
-		uint[] auctionIds;	
-		uint[] applicationIds;
-		posts.push(Post(postId, _postContent, msg.sender, "Open", now, expireTime, _noOfOffer));
-		employerToPosts[msg.sender].push(postId); 
-		postIdToAuctions[postId]=auctionIds;
-		postIdToApplications[postId]=applicationIds;
-	}
 	////create post with length of post
-	function createPost(string _postContent, uint _noOfOffer, uint _expireTime) {
+	function createPost(string _postContent, uint _noOfSlots, uint _duration) {
 		require(addToEmployer[msg.sender].length!=0);
 		uint postId = posts.length+1;
 		uint[] auctionIds;	
 		uint[] applicationIds;
-		posts.push(Post(postId, _postContent, msg.sender, "Open", now, _expireTime, _noOfOffer));
+		posts.push(Post(postId, _postContent, msg.sender, "Open",auctionIds, applicationIds,now,_duration, _noOfSlots,0,0));
 		employerToPosts[msg.sender].push(postId); 
-		postIdToAuctions[postId]=auctionIds;
-		postIdToApplications[postId]=applicationIds;
 	}
 	//cancel post
 	function cancelPost(uint _postId) onlyOwner {
 		posts[_postId-1].status = "Cancelled";
 		delete postIdToAuctions[_postId];
 		delete postIdToApplications[_postId];
+		delete employerToPosts[msg.sender]
+
 	}
 	//modify post 
 	//modify post can we store the prvious versions??? then modify is to create a new one??
@@ -101,7 +86,7 @@ contract Employers is ownable{
 	}
 
 	//CV scheduled/rejected/accepted from application
-	function processAuction (uint _postId, uint _applicationId, string _status) onlyOwner {
+	function processApplication (uint _postId, uint _applicationId, string _status) onlyOwner {
 		Application[] applications = addToEmployer[msg.sender].postIdToApplications[_postId];
 		for (uint i = 0; i < applications.length; i++) {
 			if (i == _applicationId-1) {

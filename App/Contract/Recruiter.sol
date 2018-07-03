@@ -40,22 +40,23 @@ contract Recruiters is ownable{
     //make sure recruiter can only make one auction for one post, or the preview auction is cancelled
     function makeAuction (string _postid, uint[] _cvIds) {
         require (keccak256(addToRecruiter[msg.sender].postIdToStatus[_postid])!=keccak256("Aucted")); 
+        require (keccak256(posts[_postid-1].status)==keccak256("Open"));
         mapping (uint => string) cvIdToStatus;  //put all CV in this auction into the cvStatus mapping and make it "reviewing"
         for(uint i = 0; i<_cvIds.length; i++){
             cvIdToStatus[_cvIds[i]] = "Reviewing";
         }
     	recruiterToAuctions[msg.sender].push(auctions.length+1); //add auctionId to recruiter's own auction list
-    	auctions.push(Aution(auctions.length+1, _postid, msg.sender,  now, _cvIds, cvIdToStatus, "Open")); //add auction to the global auctions list
-    	posts[_postid].auctionIds.push(auctions.length+1); //add auction to this specific post
-        addToRecruiter[msg.sender].postIdToStatus[_postid]="Auction Made";  // update post auction status
+    	auctions.push(Auction(auctions.length+1, _postid, msg.sender,  now, _cvIds, cvIdToStatus, "Open")); //add auction to the global auctions list
+    	posts[_postid-1].auctionIds.push(auctions.length+1); //add auction to this specific post
+        addToRecruiter[msg.sender].postIdToStatus[_postid]="Aucted";  // update post auction status
     }
 
     function  retrieveAllAuctions () returns(Auction[]) {  //?? Can't return Array???
         Auction[] notCancelledAuction;
         uint[] allAuctionId = recruiterToAuctions[msg.sender];
         for(uint i = 0; i< allAuctionId.length; i++){
-            if(!keccak256(auctions[allAuctionId[i]].status) == keccak256("Cancelled")){
-                notCancelledAuction.push(auctions[allAuction[i]])
+            if(!keccak256(auctions[allAuctionId[i]-1].status) == keccak256("Cancelled")){
+                notCancelledAuction.push(auctions[allAuctionId[i]-1])
             }
         }
         return notCancelledAuction;
@@ -79,7 +80,7 @@ contract Recruiters is ownable{
     }
 
     function cancelAuction (uint _auctionId) onlyOwner {
-        uint memory auctedPostId = auctions[_auctionId].postId;
+        uint memory auctedPostId = auctions[_auctionId-1].postId;
     	auctions[_auctionId-1].status = "Cancelled";
         delete addToRecruiter[msg.sender].postIdToStatus[auctedPostId]; //make sure to udpate postIdToStatus so recruiter can make new auction;
         for(uint i = 0; i<recruiterToAuctions[msg.sender].length; i++){
@@ -88,11 +89,19 @@ contract Recruiters is ownable{
                 break;
             }
         }
-        
     }  
 
     function checkCvStatusInAuction (uint _auctionId, uint _cvId)  returns(string) internal onlyOwner {  //check the cv status in one Auction
         return auctions[_auctionId-1].cvIdToStatus[_cvId];  //reviewing, scheduled for Interview, Offered, Rejected
+    }
+    
+
+    function processOfferFromEmployer (string _status, uint _cvId, uint _auctionId)  {
+        auctions[_auctionId-1].cvIdToStatus[_cvId] = _status;
+        if(keccak256(_status) == keccak256("Accepted by candidate")){
+            uint postId = auctions[_auctionId-1].postId;
+            posts[postId-1].noOfOffersAccepted ++;
+        }
     }
     
 
@@ -108,19 +117,21 @@ contract Recruiters is ownable{
     }
 
     function retrieveAllCvs () returns(uint[]) onlyOwner {   //retrieve all cvIds belongs to this recruiter
-    	return recruiterToCvs[msg.sender];
+        return recruiterToCvs[msg.sender];
     }
 
-    function retrieveOneCv (String _cvId) returns(Cv) { //need to retrieve from database
+    function retrieveOneCv (String _cvId) returns(string) { //need to retrieve from database
+        return cvs[_cvId]._hashAdd;
     }
-
-    //update with latest cv
-    function updateCv (String _cvId, String hashAdd) returns(Cv) {  //??什么鸡巴玩意？
-    }
-
+    
     //remove cv id from recruiter's cv id list
-	function deleteCv (uint _cvIds)  internal onlyOwner{  // deleted already still wanna return what? why Internal??
-		delete recruiterToCvs[msg.sender][_cvIds-1];  //don't delete in the global cvId list otherwise cvId will mess up
+	function deleteCv (uint _cvId) internal onlyOwner{  
+        for(uint i = 0; i<recruiterToCvs[msg.sender].length; i++){
+            if(recruiterToCvs[msg.sender][i]==_cvId){
+               delete recruiterToCvs[msg.sender][i];
+               break;
+            }
+        }
 	}
     //===============recruiter CRUD operation on cvs ends================
     
