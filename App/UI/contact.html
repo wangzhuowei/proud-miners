@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Candid Intel</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link href="css/animate.min.css" rel="stylesheet"> 
+	<link href="css/style.css" rel="stylesheet" />	
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+      <header id="header">
+          <nav class="navbar navbar-default navbar-static-top" role="banner">
+              <div class="container">
+                  <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                      </button>
+                      <div class="navbar-brand">
+                          <a href="index.html"><h1>Candid Intel</h1></a>
+                      </div>
+                  </div>
+                  <div class="navbar-collapse collapse">
+                      <div class="menu">
+                          <ul class="nav nav-tabs" role="tablist">
+                              <li role="presentation"><a href="index.html">Home</a></li>
+
+                              <li role="presentation"><a href="gallery.html">Login</a></li>
+
+                              <li role="presentation"><a href="contact.html" class="active">Contact Us</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div><!--/.container-->
+          </nav><!--/nav-->
+      </header><!--/header-->
+
+      <div class="map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8157397380255!2d103.84837201521341!3d1.2844872990631457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1909557f349b%3A0xec5a1b951ef8122b!2s55+Market+St%2C+Singapore+048941!5e0!3m2!1sen!2ssg!4v1530501889055" width="1600" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
+
+      </div>
+
+      <section class="contact-page">
+          <div class="container">
+              <div class="text-center">
+                  <h2>Drop Your Message</h2>
+                  <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+              <div class="row contact-wrap">
+                  <div class="status alert alert-success" style="display: none"></div>
+                  <form id="main-contact-form" class="contact-form" name="contact-form" method="post" action="sendemail.php">
+                      <div class="col-sm-5 col-sm-offset-1">
+                          <div class="form-group">
+                              <label>Name *</label>
+                              <input type="text" name="name" class="form-control" required="required">
+                          </div>
+                          <div class="form-group">
+                              <label>Email *</label>
+                              <input type="email" name="email" class="form-control" required="required">
+                          </div>
+                          <div class="form-group">
+                              <label>Phone</label>
+                              <input type="number" class="form-control">
+                          </div>
+                          <div class="form-group">
+                              <label>Company Name</label>
+                              <input type="text" class="form-control">
+                          </div>
+                      </div>
+                      <div class="col-sm-5">
+                          <div class="form-group">
+                              <label>Subject *</label>
+                              <input type="text" name="subject" class="form-control" required="required">
+                          </div>
+                          <div class="form-group">
+                              <label>Message *</label>
+                              <textarea name="message" id="message" required="required" class="form-control" rows="8"></textarea>
+                          </div>
+                          <div class="form-group">
+                              <button type="submit" name="submit" class="btn btn-primary btn-lg" required="required">Submit message</button>
+                          </div>
+                      </div>
+                  </form>
+              </div><!--/.row-->
+          </div><!--/.container-->
+      </section><!--/#contact-page-->
+
+
+      <footer>
+          <div class="container">
+              <div class="col-md-4 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
+                  <h4>About Us</h4>
+                  <p>Day is tellus ac cursus commodo, mauesris condime ntum nibh, ut fermentum mas justo sitters.</p>
+                  <div class="contact-info">
+                      <ul>
+                          <li><i class="fa fa-home fa"></i>Suite 54 Elizebth Street, Victoria State Newyork, USA </li>
+                          <li><i class="fa fa-phone fa"></i> +38 000 129900</li>
+                          <li><i class="fa fa-envelope fa"></i> info@domain.net</li>
+                      </ul>
+                  </div>
+              </div>
+
+          </div>
+      </footer>
+
+      <div class="sub-footer">
+          <div class="container">
+              <div class="social-icon">
+                  <div class="col-md-4">
+                      <ul class="social-network">
+                          <li><a href="#" class="fb tool-tip" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                          <li><a href="#" class="twitter tool-tip" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                          <li><a href="#" class="gplus tool-tip" title="Google Plus"><i class="fa fa-google-plus"></i></a></li>
+                          <li><a href="#" class="linkedin tool-tip" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+                          <li><a href="#" class="ytube tool-tip" title="You Tube"><i class="fa fa-youtube-play"></i></a></li>
+                      </ul>
+                  </div>
+              </div>
+
+              <div class="col-md-4 col-md-offset-4">
+                  <div class="copyright">
+                      &copy; Candid Intel 2018 by <a target="_blank" href="" title="Proud Miner SMU">Proud Miner</a>.All Rights Reserved.
+                  </div>
+                  <!--
+                    All links in the footer should remain intact.
+                    Licenseing information is available at: http://bootstraptaste.com/license/
+                    You can buy this theme without footer links online at: http://bootstraptaste.com/buy/?theme=Day
+                -->
+              </div>
+          </div>
+      </div>
+
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="js/jquery.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/wow.min.js"></script>
+      <script>
+          wow = new WOW(
+              {
+
+              })
+              .init();
+      </script>
+  </body>
+</html>
