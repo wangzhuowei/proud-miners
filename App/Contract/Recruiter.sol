@@ -1,13 +1,12 @@
 pragma solidity ^0.4.21;
 
-import "./Aution.sol";
+import "./Auction.sol";
 import "./Post.sol";
 import "./Cv.sol";
-import "./ownable.sol";
 
 
 
-contract Recruiters is ownable{
+contract Recruiters {
 
     //Recruiter[] recruiters;
     mapping (address => Recruiter) addToRecruiter;   
@@ -21,7 +20,7 @@ contract Recruiters is ownable{
 
 
     //=================ACCT management start=============================
-    function _createRecruiter() internal {   
+    function _createRecruiter() {   
         //require(there is no existing address in database);
         require(addToRecruiter[msg.sender].length==0);
         uint[] emptyCvIds;
@@ -51,12 +50,12 @@ contract Recruiters is ownable{
         addToRecruiter[msg.sender].postIdToStatus[_postid]="Aucted";  // update post auction status
     }
 
-    function  retrieveAllAuctions () returns(Auction[]) {  //?? Can't return Array???
+    function  retrieveAllAuctions () returns(Auction[]) {  
         Auction[] notCancelledAuction;
         uint[] allAuctionId = recruiterToAuctions[msg.sender];
         for(uint i = 0; i< allAuctionId.length; i++){
             if(!keccak256(auctions[allAuctionId[i]-1].status) == keccak256("Cancelled")){
-                notCancelledAuction.push(auctions[allAuctionId[i]-1])
+                notCancelledAuction.push(auctions[allAuctionId[i]-1]);
             }
         }
         return notCancelledAuction;
@@ -64,22 +63,26 @@ contract Recruiters is ownable{
 
     //update auction cv quantity
     //yigang: i don't think it's necessary to have this function, need this function or not????????
-    function deleteCvForAuction (uint _cvId, uint _auctionId) onlyOwner {   //only owner can delete
+    function deleteCvForAuction (uint _cvId, uint _auctionId) {   //only owner can delete
         for(uint i = 0; i<auctions[_auctionId-1].cvIds.length; i++){
             if(auctions[_auctionId-1].cvIds[i]==_cvId){
                 delete auctions[_auctionId-1].cvIds[i];
-                break;
+                delete auctions[_auctionId-1].cvIdToStatus[_cvId];
+                if(auctions[_auctionId-1].cvIds.length == 0 ){
+                    cancelAuction(_auctionId);
+                }
+                break; 
             }
         }
         
     }
 
-    function addCvForAuction (uint _cvId, uint _auctionId) onlyOwner {   //only owner can add
+    function addCvForAuction (uint _cvId, uint _auctionId) {   //only owner can add
         auctions[_auctionId-1].cvIds.push(_cvId);
         auctions[_auctionId-1].cvIdToStatus[_cvId]= "Reviewing";
     }
 
-    function cancelAuction (uint _auctionId) onlyOwner {
+    function cancelAuction (uint _auctionId) {
         uint memory auctedPostId = auctions[_auctionId-1].postId;
     	auctions[_auctionId-1].status = "Cancelled";
         delete addToRecruiter[msg.sender].postIdToStatus[auctedPostId]; //make sure to udpate postIdToStatus so recruiter can make new auction;
@@ -91,7 +94,7 @@ contract Recruiters is ownable{
         }
     }  
 
-    function checkCvStatusInAuction (uint _auctionId, uint _cvId)  returns(string) internal onlyOwner {  //check the cv status in one Auction
+    function checkCvStatusInAuction (uint _auctionId, uint _cvId)  returns(string) {  //check the cv status in one Auction
         return auctions[_auctionId-1].cvIdToStatus[_cvId];  //reviewing, scheduled for Interview, Offered, Rejected
     }
     
@@ -116,16 +119,16 @@ contract Recruiters is ownable{
         cvs.push(Cv(cvs.length+1, _hashAdd,msg.sender));
     }
 
-    function retrieveAllCvs () returns(uint[]) onlyOwner {   //retrieve all cvIds belongs to this recruiter
+    function retrieveAllCvs () returns(uint[]) {   //retrieve all cvIds belongs to this recruiter
         return recruiterToCvs[msg.sender];
     }
 
-    function retrieveOneCv (String _cvId) returns(string) { //need to retrieve from database
-        return cvs[_cvId]._hashAdd;
+    function retrieveOneCv (uint _cvId) returns(string) { //need to retrieve from database
+        return Cv.cvs[_cvId]._hashAdd;
     }
     
     //remove cv id from recruiter's cv id list
-	function deleteCv (uint _cvId) internal onlyOwner{  
+	function deleteCv (uint _cvId){  
         for(uint i = 0; i<recruiterToCvs[msg.sender].length; i++){
             if(recruiterToCvs[msg.sender][i]==_cvId){
                delete recruiterToCvs[msg.sender][i];

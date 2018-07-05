@@ -12,7 +12,7 @@ contract Auction{
 		string status;  //Open, Close, Offered, Cancelled
 	}
 
-	Auction[] auctions external; //all the auctions in this app
+	Auction[] auctions; //all the auctions in this app
 	
 }
 

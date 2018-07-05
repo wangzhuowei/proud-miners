@@ -1,9 +1,9 @@
-ragma solidity ^0.4.21;
+pragma solidity ^0.4.21;
 
 contract Post{
 
 	struct Post{
-		uint postId;
+		uint postId; //postId starts from 1,2,3,4.....
 		string postContent; 
 		address owenerAdd;// post owner, use to check CRUD right
 		string status;//Open, close, Cancelled---------only employer have the right to change
@@ -18,10 +18,9 @@ contract Post{
 	}
 
 	Post[] posts; //all the posts in this app
-	mapping (uint =>) openPosts;
 	
 	//retrieve all posts for job board
 	function _retrieveAllPosts () returns(Post[]) {
-		return openPosts;
+		return posts;
 	}	
 }
