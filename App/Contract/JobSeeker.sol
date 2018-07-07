@@ -1,21 +1,17 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.0;
 
-import "./Application.sol";
-import "./Auction.sol";
-import "./Post.sol";
-import "./Cv.sol";
+import "./Utility.sol";
 
+contract JobSeeker is Utility{
 
-
-contract JobSeekers{
-
-    mapping (address => JobSeeker) addToJobSeeker;   
+    mapping (address => JobSeeker) addToJobSeeker;
     mapping (address => uint[]) jobSeekerToAuctions; //job seekers address map to auctionId
     mapping (address => uint[]) jobSeekerToApplications; //job seekers address map to applicationId
     mapping (address => uint[]) jobSeekerToCvs; //jobSeeker address map to cvId
     
     struct JobSeeker{
         address ownerAdd;
+        uint checker;
         mapping (uint => string) postIdToAuctionStatus; //String staus: Aucted, Cancelled, ""(by default)
         mapping (uint => string) postIdToApplicationStatus; //String status: Appied, Cancelled, ""(by default)
     }
@@ -32,22 +28,19 @@ contract JobSeekers{
      * 4. update mapping jobSeekerToCvs
      *Problem:
     */
-    function _createJobSeeker () {   
-        require(addToJobSeeker[msg.sender].length==0);
+    function createJobSeeker () {   
+        require(addToJobSeeker[msg.sender].checker!=8);
         //initialize attributes
-        uint[] emptyCvIds;
-        uint[] emptyAuctionIds;
-        uint[] emptyApplicationIds;
-        mapping (uint => string) postIdToAuctionStatus;     
-        mapping (uint => string) postIdToApplicationStatus;
+        uint[] memory emptyCvIds;
+        uint[] memory emptyAuctionIds;
+        uint[] memory emptyApplicationIds;
         
-        addToJobSeeker[msg.sender] = JobSeeker(msg.sender, postIdToAuctionStatus,postIdToApplicationStatus);
+        addToJobSeeker[msg.sender] = JobSeeker(msg.sender,8);
         jobSeekerToAuctions[msg.sender] = emptyAuctionIds;
         jobSeekerToApplications[msg.sender] = emptyAuctionIds;
         jobSeekerToCvs[msg.sender]= emptyCvIds;
     }
     //===================ACCT management end============================
-
 
     //===============job seeker CRUD operation on auctions starts================
     /*function: makeAuction
@@ -62,18 +55,19 @@ contract JobSeekers{
      * 5. update mapping current JobSeeker.postIdToAuctionStatus
      *Problem:
     */
-    function makeAuction (string _postid, uint[] _cvIds) {
+    function makeAuction (uint _postid, uint[] _cvIds) {
         require (keccak256(addToJobSeeker[msg.sender].postIdToAuctionStatus[_postid]) != keccak256("Aucted"));
-        require (keccak256(Post.posts[_postid-1].status)==keccak256("Open"));
+        require (keccak256(posts[_postid-1].status)==keccak256("Open"));
         
-        mapping (uint => string) cvIdToStatus;
+        auctions.push(Auction(auctions.length+1, _postid, msg.sender,  now, _cvIds, "Open"));
+        
+        //mapping (uint => string) cvIdToS = ;
         for(uint i = 0; i<_cvIds.length; i++){
-            cvIdToStatus[_cvIds[i]] = "Reviewing";
+            auctions[auctions.length-1].cvToStatus[_cvIds[i]] = "Reviewing";
         }
         
-        Auction.auctions.push(Auction(Auction.auctions.length+1, _postid, msg.sender,  now, _cvIds, cvIdToStatus, "Open"));
-        Post.posts[_postid-1].auctionIds.push(Auction.auctions.length+1);
-        jobSeekerToAuctions[msg.sender].push(Auction.auctions.length+1);
+        posts[_postid-1].auctionIds.push(auctions.length+1);
+        jobSeekerToAuctions[msg.sender].push(auctions.length+1);
         addToJobSeeker[msg.sender].postIdToAuctionStatus[_postid]="Aucted";
     }
 
@@ -83,15 +77,15 @@ contract JobSeekers{
      * 1. retrieve msg.sender.(not cancelled auction list)
      *Problem: Can't return Array???(yigang)
     */
-    function  retrieveAllAuctions () returns(Auction[]) {
-        Auction[] notCancelledAuction;
-        uint[] allAuctionId = jobSeekerToAuctions[msg.sender];
+    function retrieveAllAuctions () returns(uint[]) {
+        //uint[] notCancelledAuction;
+        uint[] memory allAuctionId = jobSeekerToAuctions[msg.sender];
         for(uint i = 0; i< allAuctionId.length; i++){
-            if(keccak256(Auction.auctions[allAuctionId[i]-1].status) != keccak256("Cancelled")){
-                notCancelledAuction.push(Auction.auctions[allAuctionId[i]-1]);
+            if(keccak256(auctions[allAuctionId[i]-1].status) != keccak256("Cancelled")){
+                delete allAuctionId[i];
             }
         }
-        return notCancelledAuction;
+        return allAuctionId;
     }
 
     /*function: deleteCvForAuction
@@ -103,14 +97,14 @@ contract JobSeekers{
      *Problem:
     */
     function deleteCvForAuction (uint _cvId, uint _auctionId) {
-        for(uint i = 0; i<Auction.auctions[_auctionId-1].cvIds.length; i++){
-            if(Auction.auctions[_auctionId-1].cvIds[i]==_cvId){
-                delete Auction.auctions[_auctionId-1].cvIds[i];
-                delete Auction.auctions[_auctionId-1].cvIdToStatus[_cvId];
-                if(Auction.auctions[_auctionId-1].cvIds.length == 0 ){
-                    JobSeeker.cancelAuction(_auctionId);
-                } 
-                
+        
+        for(uint i = 0; i<auctions[_auctionId-1].cvIds.length; i++){
+            if(auctions[_auctionId-1].cvIds[i]==_cvId){
+                delete auctions[_auctionId-1].cvIds[i];
+                delete auctions[_auctionId-1].cvToStatus[_cvId];
+                if(auctions[_auctionId-1].cvIds.length == 0 ){
+                    cancelAuction(_auctionId);
+                }
                 break;
             }
         }
@@ -124,8 +118,8 @@ contract JobSeekers{
      *Problem:
     */
     function addCvForAuction (uint _cvId, uint _auctionId) {
-        Auction.auctions[_auctionId-1].cvIds.push(_cvId);
-        Auction.auctions[_auctionId-1].cvIdToStatus[_cvId]= "Reviewing";
+        auctions[_auctionId-1].cvIds.push(_cvId);
+        auctions[_auctionId-1].cvToStatus[_cvId]= "Reviewing";
     }
 
     /*function: cancelAunction
@@ -137,9 +131,9 @@ contract JobSeekers{
      * 4. ===================== remove auctionId From post.auctionIds?
      *Problem:
     */
-    function cancelAunction (uint _auctionId) {
-        uint auctedPostId = Auction.auctions[_auctionId-1].postId;
-        Auction.auctions[_auctionId-1].status = "Cancelled";
+    function cancelAuction (uint _auctionId) {
+        uint auctedPostId = auctions[_auctionId-1].postId;
+        auctions[_auctionId-1].status = "Cancelled";
         delete addToJobSeeker[msg.sender].postIdToAuctionStatus[auctedPostId];
         for(uint i = 0; i<jobSeekerToAuctions[msg.sender].length; i++){
             if(jobSeekerToAuctions[msg.sender][i] == _auctionId){
@@ -157,7 +151,7 @@ contract JobSeekers{
     */
     function checkCvStatusInAuction (uint _auctionId, uint _cvId) returns(string) {
         //return: Reviewing, Shortlisted, Rejected by eployer, Offered by employer, Accepted by candidate, Rejected by candiate
-        return Auction.auctions[_auctionId-1].cvIdToStatus[_cvId]; 
+        return auctions[_auctionId-1].cvToStatus[_cvId]; 
     }
 
     /*function: processAuctionOfferFromJobSeeker
@@ -168,10 +162,10 @@ contract JobSeekers{
      *Problem:
     */
     function processAuctionOfferFromJobSeeker (string _status, uint _cvId, uint _auctionId) {
-        Auction.auctions[_auctionId-1].cvIdToStatus[_cvId] = _status;
+        auctions[_auctionId-1].cvToStatus[_cvId] = _status;
         if(keccak256(_status) == keccak256("Accepted by candidate")){
-            uint postId = Auction.auctions[_auctionId-1].postId;
-            Post.posts[postId-1].noOfOffersAccepted ++;
+            uint postId = auctions[_auctionId-1].postId;
+            posts[postId-1].noOfOffersAccepted ++;
         }
     }
     //===============job seeker CRUD operation on auctions ends===========
@@ -190,14 +184,13 @@ contract JobSeekers{
      * 5. update mapping current JobSeeker.postIdToApplicationStatus
      *Problem:
     */
-    function makeApplication (string _postid, uint _cvId) {
+    function makeApplication (uint _postid, uint _cvId) {
         require (keccak256(addToJobSeeker[msg.sender].postIdToApplicationStatus[_postid]) != keccak256("Applied"));
-        require (keccak256(Post.posts[_postid-1].status)==keccak256("Open"));
+        require (keccak256(posts[_postid-1].status)==keccak256("Open"));
 
-        string cvStatus = "Reviewing";
-        Application.applications.push(Application(Application.applications.length+1, _postid, msg.sender,  now, _cvId, "Reviewing", "Open")); //add auction to the global auctions list
-        jobSeekerToApplications[msg.sender].push(Application.applications.length+1);
-        Post.posts[_postid-1].applicationIds.push(Application.applications.length+1);
+        applications.push(Application(applications.length+1, _postid, msg.sender,  now, _cvId, "Reviewing", "Open")); //add auction to the global auctions list
+        jobSeekerToApplications[msg.sender].push(applications.length+1);
+        posts[_postid-1].applicationIds.push(applications.length+1);
         addToJobSeeker[msg.sender].postIdToApplicationStatus[_postid]="Applied";
     }
 
@@ -207,15 +200,15 @@ contract JobSeekers{
      * 1. retrieve msg.sender.(not cancelled application list)
      *Problem: Can't return Array???(yigang)
     */
-    function  retrieveAllApplications () returns(Application[]) {
-        Application[] notCancelledApplication;
+    function retrieveAllApplications () returns(uint[]) {
+        //Application[] notCancelledApplication;
         uint[] allApplicationId = jobSeekerToApplications[msg.sender];
         for(uint i = 0; i< allApplicationId.length; i++){
-            if(keccak256(Application.applications[allApplicationId[i]-1].status) != keccak256("Cancelled")){
-                notCancelledApplication.push(Application.applications[allApplicationId[i]-1]);
+            if(keccak256(applications[allApplicationId[i]-1].status) != keccak256("Cancelled")){
+                delete allApplicationId[i];
             }
         }
-        return notCancelledApplication;
+        return allApplicationId;
     }
 
     /*function: cancelApplication
@@ -228,8 +221,8 @@ contract JobSeekers{
      *Problem:
     */
     function cancelApplication (uint _applicationId) {
-        uint appiedPostId = Application.applications[_applicationId-1].postId;
-        Application.applications[_applicationId-1].status = "Cancelled";
+        uint appiedPostId = applications[_applicationId-1].postId;
+        applications[_applicationId-1].status = "Cancelled";
         delete addToJobSeeker[msg.sender].postIdToApplicationStatus[appiedPostId];
         for(uint i = 0; i<jobSeekerToApplications[msg.sender].length; i++){
             if(jobSeekerToApplications[msg.sender][i] == _applicationId){
@@ -247,7 +240,7 @@ contract JobSeekers{
     */
     function checkCvStatusInApplication (uint _applicationId)  returns(string) {
         // return: Reviewing, Shortlisted, Rejected by eployer, Offered by employer, Accepted by candidate, Rejected by candiate
-        return Application.applications[_applicationId-1].cvStatus;
+        return applications[_applicationId-1].cvStatus;
     }
 
     /*function: processApplicationOfferFromJobSeeker
@@ -258,10 +251,10 @@ contract JobSeekers{
      *Problem:
     */
     function processApplicationOfferFromJobSeeker (string _status,uint _applicationId) {
-        Application.applications[_applicationId-1].cvStatus = _status;
+        applications[_applicationId-1].cvStatus = _status;
         if(keccak256(_status) == keccak256("Accepted by candidate")){
-            uint postId = Application.applications[_applicationId-1].postId;
-            Post.posts[postId-1].noOfOffersAccepted ++;
+            uint postId = applications[_applicationId-1].postId;
+            posts[postId-1].noOfOffersAccepted ++;
         }
     }
     //===============job seeker CRUD operation on applications ends========
@@ -277,9 +270,9 @@ contract JobSeekers{
     */
     function _addCv (string _hashAdd)  {
         //update jobSeekerToCvs
-        jobSeekerToCvs[msg.sender].push(Cv.cvs.length+1);
+        jobSeekerToCvs[msg.sender].push(cvs.length+1);
         //update cvs in cv contract
-        Cv.cvs.push(Cv(Cv.cvs.length+1, _hashAdd,msg.sender));
+        cvs.push(Cv(cvs.length+1, _hashAdd,msg.sender));
     }
     
     /*function: retrieveAllCvs
@@ -300,8 +293,8 @@ contract JobSeekers{
     */
     function deleteCv (uint _cvId) {
         uint index;
-        for(uint i = 0; i<Cv.cvs.length; i++){
-            if(Cv.cvs[i].cvId==_cvId){
+        for(uint i = 0; i<cvs.length; i++){
+            if(cvs[i].cvId==_cvId){
                 index= i;
             }
         }
