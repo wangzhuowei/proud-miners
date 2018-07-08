@@ -5,16 +5,117 @@
 @import url('animate.css');
 
 
+
+/*===========================
+Logo
+============================ */
+.h_container{
+padding-left:100px;
+}
+.menu_div{
+position: relative;
+right:100px;  
+float:right;
+}
+
+
+#logo_pic{
+height: 70px;
+width:350px;
+    
+}
+
+/*===========================
+E_Auction
+============================ */
+#auct_cur_btn{
+right:10px;
+}
+
+.top_btn_div{
+	float:right;
+	padding-bottom:20px;
+	padding-top:20px;
+}
+.top_btn_div button{
+	padding-right:20px;
+	position:relative;
+}
+
+.job_adv_box{
+    position: relative;
+    top:50px;
+    margin: 10px 10px 10px 10px;
+    background: white;
+    height: 120px;
+    border-style:solid;
+}
+
+.e_auc_info_tb{
+    top:10px;
+    width:870px;
+    
+     
+}
+#click_tb{
+display:block;
+    
+}
+
+.e_auc_info_tb td{
+    padding-left:10px;
+
+    width:400px;
+    
+}
+
+.e_auc_info_tb td a:hover{
+    
+text-decoration: underline;
+ 
+    
+}
+
+
+/*===========================
+Auction
+============================ */
+.auct_tb_div {
+    padding-top: 10px;
+    
+    
+}
+
+.auct_box {
+    margin: 10px 10px 10px 10px;
+    background: white;
+    height: 120px;
+    border-style:solid;
+}
+
+.auct_btn {
+    width: 150px;
+}
+.auct_info_div {
+    width: 70%;
+    display: inline-block;
+}
+
+.auct_btn_div {
+    float:right;
+    padding-right:2%;
+   
+    display: inline-block;
+}
+
 /*===========================
 My Account Overview
 ============================ */
-
 .wrap {
     background-color: #f1f1f1;
     color: dimgray;
     height: 1000px;
     width: 100%;
-   
 }
 
 
@@ -22,8 +123,8 @@ My Account Overview
     float: left;
     position: relative;
     top: 50px;
-    left:7%;
-    width: 850px;
+    left:5%;
+    width: 900px;
     height: 1000px;
 }
 
@@ -53,7 +154,7 @@ My Account Overview
     font-weight: bold;
     color: black;
 }
-    
+   
 
 
 /*===========================
@@ -71,7 +172,7 @@ Job Board
     top:50px;
     left:40px;
     width: 250px;
-    height:470px;
+    height:490px;
     background-color: white;
 }
 
@@ -251,7 +352,7 @@ a:hover {
 .btn {
 	border-radius:0;
 	margin-top:10px;
-	background-color: #65AAF0;
+	background-color: #f8ac4c;
 	text-transform:uppercase;
 	border-color:#fff;
 	font-size:14px;
@@ -279,7 +380,7 @@ a:hover {
 	padding-top:5px;
 	float: left;	
 	font-size: 25px;	
-	color:#fff;	
+	color:#000;	
 	text-transform:uppercase;
 	font-weight:600;
 }
@@ -318,26 +419,26 @@ a:hover {
 
 .nav-tabs > li > a {	
 	border-radius:0;
-	color:#fff;
+	color:#000;
 	padding:30px;
 }
 
 .nav-tabs > li > a:hover {
 	color:#272727;
-	background:#fff;	
+	background:#f8ac4c;	
 } 
 
 .nav-tabs > li a.active {
 	color: #555;
 	cursor: default;
-	background-color: #fff;
+	background-color: #f8ac4c;
 	border: 1px solid #fff;
 	border-bottom-color:#fff;
 }
 
 .navbar-default {
-	background-color: #65AAF0;
-	border-color:#65AAF0;
+	background-color: #fff;
+	border-color:#fff;
 }
 
 /*===========================
@@ -368,15 +469,15 @@ a:hover {
 	position: absolute;
 	top: 50%;
 	width: 50px;
-	color:#65AAF0;
-	background:#65AAF0;
+	color:#f8ac4c;
+	background:#f8ac4c;
 	color:#fff;
 }
 
 #carousel-slider a i:hover {
-	background:#65AAF0;
+	background:#f8ac4c;
 	color:#fff;
-	border: 1px solid #65AAF0;
+	border: 1px solid #f8ac4c;
 }
 
 #carousel-slider 
@@ -422,7 +523,7 @@ a:hover {
 	margin-bottom:20px;
 	color:#fff;
 	padding:10px;
-	background:#65AAF0;
+	background:#f8ac4c;
 }
 
 .carousel-inner .form-inline .form-group button[type="livedemo"]{

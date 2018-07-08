@@ -23,7 +23,7 @@
   <body>
       <header id="header">
           <nav class="navbar navbar-default navbar-static-top" role="banner">
-              <div class="container">
+              <div class="h_container">
                   <div class="navbar-header">
                       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                           <span class="sr-only">Toggle navigation</span>
@@ -31,20 +31,16 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                       </button>
-                      <div class="navbar-brand">
-                          <a href="index.html"><h1>Candid Intel</h1></a>
-                      </div>
+                     <a href="index.html"><img src="img/ci_logo.png" alt="Home" id="logo_pic"></a>
                   </div>
-                  <div class="navbar-collapse collapse">
+                  <div class="menu_div">
                       <div class="menu">
                           <ul class="nav nav-tabs" role="tablist">
-                              <li role="presentation"><a href="accountOverview.html">Account Overview</a></li>
-                              <li role="presentation"><a href="jobboard.html" class="active">Job Board</a></li>
-                              <li role="presentation"><a href="recruiterList.html">Recruiter List</a></li>
+                              <li role="presentation"><a href="E_AccOverview.jsp" >Account Overview</a></li>
+                              <li role="presentation"><a href="E_JobBoard.jsp" class="active">Job Board</a></li>
                               <li role="presentation"><a href="">Wallet</a></li>
-
-                              <li role="presentation"><a href="">Sign Out</a></li>
-                              <li role="presentation"><a href="contact.html">Contact Us</a></li>
+                              <li role="presentation"><a href="index.html">Sign Out</a></li>
+                              <li role="presentation"><a href="H_contact.jsp">Contact Us</a></li>
                           </ul>
                       </div>
                   </div>
@@ -145,7 +141,7 @@
      
 
       <div class="sub-footer">
-          <div class="container">
+          <div class="h_container">
               <div class="social-icon">
                   <div class="col-md-4">
                       <ul class="social-network">

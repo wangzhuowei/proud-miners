@@ -23,7 +23,7 @@
   <body>
       <header id="header">
           <nav class="navbar navbar-default navbar-static-top" role="banner">
-              <div class="container">
+              <div class="h_container">
                   <div class="navbar-header">
                       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                           <span class="sr-only">Toggle navigation</span>
@@ -31,18 +31,16 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                       </button>
-                      <div class="navbar-brand">
-                          <a href="index.html"><h1>Candid Intel</h1></a>
-                      </div>
+                      <a href="index.html"><img src="img/ci_logo.png" alt="Home" id="logo_pic"></a>
                   </div>
-                  <div class="navbar-collapse collapse">
+                  <div class="menu_div">
                       <div class="menu">
                           <ul class="nav nav-tabs" role="tablist">
                               <li role="presentation"><a href="index.html">Home</a></li>
 
                               <li role="presentation"><a href="gallery.html">Login</a></li>
 
-                              <li role="presentation"><a href="contact.html" class="active">Contact Us</a></li>
+                              <li role="presentation"><a href="contact.jsp" class="active">Contact Us</a></li>
                           </ul>
                       </div>
                   </div>
@@ -56,7 +54,7 @@
       </div>
 
       <section class="contact-page">
-          <div class="container">
+          <div class="h_container">
               <div class="text-center">
                   <h2>Drop Your Message</h2>
                   <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -101,16 +99,18 @@
       </section><!--/#contact-page-->
 
 
-      <footer>
+       <footer>
           <div class="container">
               <div class="col-md-4 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
-                  <h4>About Us</h4>
-                  <p>Day is tellus ac cursus commodo, mauesris condime ntum nibh, ut fermentum mas justo sitters.</p>
+                  <h4>Contact Us</h4>
+                 
                   <div class="contact-info">
                       <ul>
-                          <li><i class="fa fa-home fa"></i>Suite 54 Elizebth Street, Victoria State Newyork, USA </li>
-                          <li><i class="fa fa-phone fa"></i> +38 000 129900</li>
-                          <li><i class="fa fa-envelope fa"></i> info@domain.net</li>
+                          <li><i class="fa fa-home fa"></i> Address:   55 Market Street #15-00</li>
+                          <li><i class="fa fa-home fa"></i> Post Code: Singapore 048941</li>
+                          <li><i class="fa fa-phone fa"></i> Phone:    +65-8121 9617</li>
+                          <li><i class="fa fa-phone fa"></i> Mobile:   +65-6521 3159</li>
+                          <li><i class="fa fa-envelope fa"></i> Email: kevin@candid-i.com</li>
                       </ul>
                   </div>
               </div>
