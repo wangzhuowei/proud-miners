@@ -2,303 +2,238 @@ pragma solidity ^0.4.0;
 
 import "./Utility.sol";
 
-contract JobSeeker is Utility{
+contract JobSeeker {
 
-    mapping (address => JobSeeker) addToJobSeeker;
-    mapping (address => uint[]) jobSeekerToAuctions; //job seekers address map to auctionId
-    mapping (address => uint[]) jobSeekerToApplications; //job seekers address map to applicationId
-    mapping (address => uint[]) jobSeekerToCvs; //jobSeeker address map to cvId
+    mapping (address => JobSeeker) public addToJobSeeker;
+    mapping (address => uint[]) public jobSeekerToAuctions; //job seekers address map to auctionId
+    mapping (address => uint[]) public jobSeekerToApplications; //job seekers address map to applicationId
+    mapping (address => uint[]) public jobSeekerToCvs; //jobSeeker address map to cvId
     
+    address utilityAdd;
+
     struct JobSeeker{
         address ownerAdd;
         uint checker;
-        mapping (uint => string) postIdToAuctionStatus; //String staus: Aucted, Cancelled, ""(by default)
-        mapping (uint => string) postIdToApplicationStatus; //String status: Appied, Cancelled, ""(by default)
+        mapping (uint => string)  postIdToAuctionStatus; //String staus: Aucted, Cancelled, ""(by default)
+        mapping (uint => string)  postIdToApplicationStatus; //String status: Appied, Cancelled, ""(by default)
     }
 
 
     //=================ACCT management start=============================
-    /*function: _createJobSeeker
-     *verification:
-     *  1. msg.sender not in mapping addToJobSeeker 
-     *Details:
-     * 1. update mapping addToJobSeeker
-     * 2. update mapping jobSeekerToAuctions
-     * 3. update mapping jobSeekerToApplications
-     * 4. update mapping jobSeekerToCvs
-     *Problem:
-    */
-    function createJobSeeker () {   
+    function createJobSeeker (address _utilityAdd) {   
         require(addToJobSeeker[msg.sender].checker!=8);
         //initialize attributes
-        uint[] memory emptyCvIds;
-        uint[] memory emptyAuctionIds;
-        uint[] memory emptyApplicationIds;
+        uint[]  emptyCvIds;
+        uint[]  emptyAuctionIds;
+        uint[]  emptyApplicationIds;
         
         addToJobSeeker[msg.sender] = JobSeeker(msg.sender,8);
         jobSeekerToAuctions[msg.sender] = emptyAuctionIds;
         jobSeekerToApplications[msg.sender] = emptyAuctionIds;
         jobSeekerToCvs[msg.sender]= emptyCvIds;
+
+        utilityAdd=_utilityAdd;
     }
     //===================ACCT management end============================
 
     //===============job seeker CRUD operation on auctions starts================
-    /*function: makeAuction
-     *verification:
-     * 1. havent aucted the selected post yet
-     * 2. post status is open
-     *Details:
-     * 1. create struc auction
-     * 2. update list auctions with new auction
-     * 3. update auctionIds of selected post
-     * 4. update mapping jobSeekerToAuctions
-     * 5. update mapping current JobSeeker.postIdToAuctionStatus
-     *Problem:
-    */
     function makeAuction (uint _postid, uint[] _cvIds) {
         require (keccak256(addToJobSeeker[msg.sender].postIdToAuctionStatus[_postid]) != keccak256("Aucted"));
-        require (keccak256(posts[_postid-1].status)==keccak256("Open"));
+        require (keccak256(Utility(utilityAdd).getPostStatus(_postid))==keccak256("Open"));
+
+        uint newAuctionId = Utility(utilityAdd).countNewAuctionId();
+        Utility(utilityAdd).addAuction(newAuctionId, _postid, msg.sender, now, _cvIds, "Open");
         
-        auctions.push(Auction(auctions.length+1, _postid, msg.sender,  now, _cvIds, "Open"));
-        
-        //mapping (uint => string) cvIdToS = ;
         for(uint i = 0; i<_cvIds.length; i++){
-            auctions[auctions.length-1].cvToStatus[_cvIds[i]] = "Reviewing";
+            Utility(utilityAdd).changeCvStatusForOneAuction(newAuctionId, _cvIds[i], "Reviewing");
+            //Utility.getAuctions()[Utility.getAuctions().length-1].cvToStatus[_cvIds[i]] = "Reviewing";
         }
         
-        posts[_postid-1].auctionIds.push(auctions.length+1);
-        jobSeekerToAuctions[msg.sender].push(auctions.length+1);
+        Utility(utilityAdd).addAuctionIdToOnePost(_postid, newAuctionId );
+        //Utility.getPosts()[_postid-1].auctionIds.push(Utility.getAuctions().length+1);
+        jobSeekerToAuctions[msg.sender].push(newAuctionId);
         addToJobSeeker[msg.sender].postIdToAuctionStatus[_postid]="Aucted";
     }
 
-    /*function: retrieveAllAuctions
-     *verification:
-     *Details:
-     * 1. retrieve msg.sender.(not cancelled auction list)
-     *Problem: Can't return Array???(yigang)
-    */
-    function retrieveAllAuctions () returns(uint[]) {
-        //uint[] notCancelledAuction;
+    function retrieveAllAuctions () public constant returns(uint[]) {
+     /*   uint[] notCancelledAuctions;
         uint[] memory allAuctionId = jobSeekerToAuctions[msg.sender];
-        for(uint i = 0; i< allAuctionId.length; i++){
-            if(keccak256(auctions[allAuctionId[i]-1].status) != keccak256("Cancelled")){
-                delete allAuctionId[i];
+        for(uint j = 0; j< allAuctionId.length; j++){
+            if(keccak256(Utility(utilityAdd).getAuctionStatus(allAuctionId[j])) != keccak256("Cancelled")){
+                notCancelledAuctions.push(allAuctionId[j]);
             }
-        }
-        return allAuctionId;
+        }   */
+        return jobSeekerToAuctions[msg.sender];
     }
 
-    /*function: deleteCvForAuction
-     *verification:
-     *Details:
-     * 1. delete the cvId From auction
-     * 2. update mapping cvIdToStatus
-     * 3. =============== if current auction.cvIds.length == 0, Call funciton cancelAuction?
-     *Problem:
-    */
-    function deleteCvForAuction (uint _cvId, uint _auctionId) {
-        
-        for(uint i = 0; i<auctions[_auctionId-1].cvIds.length; i++){
-            if(auctions[_auctionId-1].cvIds[i]==_cvId){
-                delete auctions[_auctionId-1].cvIds[i];
-                delete auctions[_auctionId-1].cvToStatus[_cvId];
-                if(auctions[_auctionId-1].cvIds.length == 0 ){
-                    cancelAuction(_auctionId);
-                }
-                break;
-            }
+    function deleteCvForAuction (uint _cvId, uint _auctionId) {      
+        Utility(utilityAdd).deleteCvForAuction(_cvId,_auctionId);
+        if(Utility(utilityAdd).retrieveNoOfCvsForAuction(_auctionId) == 0 ){
+            cancelAuction(_auctionId);
         }
     }
 
-    /*function: addCvForAuction
-     *verification:
-     *Details:
-     * 1. update auctions.auction.cvIds
-     * 2. update auctions.auction.cvIdToStatus
-     *Problem:
-    */
     function addCvForAuction (uint _cvId, uint _auctionId) {
-        auctions[_auctionId-1].cvIds.push(_cvId);
-        auctions[_auctionId-1].cvToStatus[_cvId]= "Reviewing";
+        Utility(utilityAdd).addCvToAuction(_cvId,_auctionId);
     }
 
-    /*function: cancelAunction
-     *verification:
-     *Details:
-     * 1. update auction status to Cancelled
-     * 2. update struc JobSeeker.postIdToAuctionStatus
-     * 3. update jobSeekerToAuctions
-     * 4. ===================== remove auctionId From post.auctionIds?
-     *Problem:
-    */
     function cancelAuction (uint _auctionId) {
-        uint auctedPostId = auctions[_auctionId-1].postId;
-        auctions[_auctionId-1].status = "Cancelled";
+        uint auctedPostId = Utility(utilityAdd).getPostIdForAuction(_auctionId);
+        Utility(utilityAdd).changeAuctionStatus(_auctionId,"Cancelled");
         delete addToJobSeeker[msg.sender].postIdToAuctionStatus[auctedPostId];
         for(uint i = 0; i<jobSeekerToAuctions[msg.sender].length; i++){
             if(jobSeekerToAuctions[msg.sender][i] == _auctionId){
                 delete jobSeekerToAuctions[msg.sender][i];
+
+                for (uint m = i; m<jobSeekerToAuctions[msg.sender].length-1; m++){
+                    jobSeekerToAuctions[msg.sender][m] = jobSeekerToAuctions[msg.sender][m+1];
+                }
+                delete jobSeekerToAuctions[msg.sender][jobSeekerToAuctions[msg.sender].length-1];
+                jobSeekerToAuctions[msg.sender].length--;
+            
+
                 break;
             }
         }
     }
 
-    /*function: checkCvStatusInAuction
-     *verification:
-     *Details:
-     * 1. return auctions.auction.cvIdToStatus
-     *Problem:
-    */
-    function checkCvStatusInAuction (uint _auctionId, uint _cvId) returns(string) {
+    function checkCvStatusInAuction (uint _auctionId, uint _cvId) public constant returns(string) {
         //return: Reviewing, Shortlisted, Rejected by eployer, Offered by employer, Accepted by candidate, Rejected by candiate
-        return auctions[_auctionId-1].cvToStatus[_cvId]; 
+        return Utility(utilityAdd).getCvStatusForAuction(_auctionId,_cvId);
     }
 
-    /*function: processAuctionOfferFromJobSeeker
-     *verification:
-     *Details:
-     * 1. update auctions.auction.cvIdToStatus
-     * 2. update posts.post.noOfOfferAccepted if accept
-     *Problem:
-    */
     function processAuctionOfferFromJobSeeker (string _status, uint _cvId, uint _auctionId) {
-        auctions[_auctionId-1].cvToStatus[_cvId] = _status;
-        if(keccak256(_status) == keccak256("Accepted by candidate")){
-            uint postId = auctions[_auctionId-1].postId;
-            posts[postId-1].noOfOffersAccepted ++;
-        }
+        Utility(utilityAdd).processAuctionOffer(_status,_cvId,_auctionId);
     }
+
+    function getAuctedPost (uint _auctionId) public constant returns(string) {
+        return Utility(utilityAdd).getPostContent(Utility(utilityAdd).getPostIdForAuction(_auctionId));
+    }
+
     //===============job seeker CRUD operation on auctions ends===========
 
+    function getPostStatus (uint _postId) public constant returns(string) {
+        return Utility(utilityAdd).getPostStatus(_postId);
+    }
 
     //===============job seeker CRUD on application starts================
-    /*function: makeApplication
-     *verification:
-     * 1. havent applied the selected post yet
-     * 2. post status is open
-     *Details:
-     * 1. create struc application
-     * 2. update list applications with new application
-     * 3. update applicationIds of selected post
-     * 4. update mapping jobSeekerToApplications
-     * 5. update mapping current JobSeeker.postIdToApplicationStatus
-     *Problem:
-    */
+   
+    function getAppliedPost (uint _applicationId) public constant returns(string) {
+        return Utility(utilityAdd).getPostContent(Utility(utilityAdd).getPostIdForApplication(_applicationId));
+    }
+
     function makeApplication (uint _postid, uint _cvId) {
         require (keccak256(addToJobSeeker[msg.sender].postIdToApplicationStatus[_postid]) != keccak256("Applied"));
-        require (keccak256(posts[_postid-1].status)==keccak256("Open"));
+        require (keccak256(Utility(utilityAdd).getPostStatus(_postid))==keccak256("Open"));
 
-        applications.push(Application(applications.length+1, _postid, msg.sender,  now, _cvId, "Reviewing", "Open")); //add auction to the global auctions list
-        jobSeekerToApplications[msg.sender].push(applications.length+1);
-        posts[_postid-1].applicationIds.push(applications.length+1);
+        uint newApplicationId = Utility(utilityAdd).countNewApplicationId();
+
+        Utility(utilityAdd).addApplication(newApplicationId, _postid, msg.sender,  now, _cvId, "Reviewing","Open");
+        jobSeekerToApplications[msg.sender].push(newApplicationId);
+        //posts[_postid-2].applicationIds.push(applications.length+1);
+        Utility(utilityAdd).addApplicationIdToOnePost(_postid, newApplicationId );
         addToJobSeeker[msg.sender].postIdToApplicationStatus[_postid]="Applied";
     }
 
-    /*function: retrieveAllApplications
-     *verification:
-     *Details:
-     * 1. retrieve msg.sender.(not cancelled application list)
-     *Problem: Can't return Array???(yigang)
-    */
-    function retrieveAllApplications () returns(uint[]) {
-        //Application[] notCancelledApplication;
-        uint[] allApplicationId = jobSeekerToApplications[msg.sender];
-        for(uint i = 0; i< allApplicationId.length; i++){
-            if(keccak256(applications[allApplicationId[i]-1].status) != keccak256("Cancelled")){
-                delete allApplicationId[i];
+/*
+    function getPost (uint _postId) public constant returns(string) {
+        return Utility(utilityAdd).getPostContent(_postId);
+    }   */
+
+    function retrieveAllApplications () public constant returns(uint[]) {
+        //not Cancelled Application ids
+      /*  uint[] allApplicationId = jobSeekerToApplications[msg.sender];
+       for(uint i = 0; i< allApplicationId.length; i++){
+            if(keccak256(Utility(utilityAdd).getApplicationStatus(allApplicationId[i])) == keccak256("Cancelled")){
+                delete jobSeekerToApplications[msg.sender][i];
+
+                for (uint m = i; m<jobSeekerToApplications[msg.sender].length-1; m++){
+                    jobSeekerToApplications[msg.sender][m] = jobSeekerToApplications[msg.sender][m+1];
+                }
+                delete jobSeekerToApplications[msg.sender][jobSeekerToApplications[msg.sender].length-1];
+                jobSeekerToApplications[msg.sender].length--;
             }
-        }
-        return allApplicationId;
+        }  */
+        return jobSeekerToApplications[msg.sender];
     }
 
-    /*function: cancelApplication
-     *verification:
-     *Details:
-     * 1. update application status to Cancelled
-     * 2. update struc JobSeeker.postIdToApplicationStatus
-     * 3. update jobSeekerToApplications
-     * 4. ===================== remove applicationId From post.applicationIds?
-     *Problem:
-    */
     function cancelApplication (uint _applicationId) {
-        uint appiedPostId = applications[_applicationId-1].postId;
-        applications[_applicationId-1].status = "Cancelled";
+        uint appiedPostId = Utility(utilityAdd).getPostIdForApplication(_applicationId);
+        Utility(utilityAdd).changeApplicationStatus(_applicationId,"Cancelled");
         delete addToJobSeeker[msg.sender].postIdToApplicationStatus[appiedPostId];
         for(uint i = 0; i<jobSeekerToApplications[msg.sender].length; i++){
             if(jobSeekerToApplications[msg.sender][i] == _applicationId){
                 delete jobSeekerToApplications[msg.sender][i];
+
+                for (uint m = i; m<jobSeekerToApplications[msg.sender].length-1; m++){
+                    jobSeekerToApplications[msg.sender][m] = jobSeekerToApplications[msg.sender][m+1];
+                }
+                delete jobSeekerToApplications[msg.sender][jobSeekerToApplications[msg.sender].length-1];
+                jobSeekerToApplications[msg.sender].length--;
                 break;
             }
         }        
     }
 
-    /*function: checkCvStatusInApplication
-     *verification:
-     *Details:
-     * 1. return applications.application.cvStatus
-     *Problem:
-    */
-    function checkCvStatusInApplication (uint _applicationId)  returns(string) {
+    function getOneApplicationStatus (uint _applicationId) public constant returns(string){
+        return Utility(utilityAdd).getApplicationStatus(_applicationId);
+    }
+    
+
+    function checkCvStatusInApplication (uint _applicationId)  public constant returns(string) {
         // return: Reviewing, Shortlisted, Rejected by eployer, Offered by employer, Accepted by candidate, Rejected by candiate
-        return applications[_applicationId-1].cvStatus;
+        return Utility(utilityAdd).getApplicationCvStatus(_applicationId);
     }
 
-    /*function: processApplicationOfferFromJobSeeker
-     *verification:
-     *Details:
-     * 1. update applications.application.cvStatus
-     * 2. update posts.post.noOfOfferAccepted if accept
-     *Problem:
-    */
     function processApplicationOfferFromJobSeeker (string _status,uint _applicationId) {
-        applications[_applicationId-1].cvStatus = _status;
-        if(keccak256(_status) == keccak256("Accepted by candidate")){
-            uint postId = applications[_applicationId-1].postId;
-            posts[postId-1].noOfOffersAccepted ++;
-        }
+        Utility(utilityAdd).processApplicationOfferByJobSeeker(_status,_applicationId);
     }
     //===============job seeker CRUD operation on applications ends========
 
-
     //===============job seeker CRUD operation on cvs start================
-    /*function: _addCv
-     *verification:
-     *Details:
-     * 1. update jobSeekerToCvs
-     * 2. update cvs
-     *Problem:
-    */
-    function _addCv (string _hashAdd)  {
+    
+    function addCv (string _hashAdd) {
+        uint newCvId = Utility(utilityAdd).countNewCvId();
         //update jobSeekerToCvs
-        jobSeekerToCvs[msg.sender].push(cvs.length+1);
+        jobSeekerToCvs[msg.sender].push(newCvId);
         //update cvs in cv contract
-        cvs.push(Cv(cvs.length+1, _hashAdd,msg.sender));
+        Utility(utilityAdd).addCv(newCvId,_hashAdd,msg.sender);
     }
     
-    /*function: retrieveAllCvs
-     *verification:
-     *Details:
-     * 1. return jobSeekerToCvs
-     *Problem:
-    */
-    function retrieveAllCvs () returns(uint[]) {
+    function getCv (uint _cvId) public constant returns(string){
+        uint[] allCvIds = jobSeekerToCvs[msg.sender];
+        uint deleted = 1;
+        for(uint i = 0; i<allCvIds.length; i++){
+            if(allCvIds[i]==_cvId){
+                deleted--;
+            }
+        }
+        if(deleted==0){
+            return Utility(utilityAdd).getCvHashAdd(_cvId);
+        }else{
+            return "The CV you are looking for is deleted";
+        }
+        
+    }
+
+    function retrieveAllCvs () public constant returns(uint[]) {
         return jobSeekerToCvs[msg.sender];
     }
 
-    /*function: deleteCv
-     *verification:
-     *Details:
-     * 1. update jobSeekerToCvs
-     *Problem:
-    */
-    function deleteCv (uint _cvId) {
-        uint index;
-        for(uint i = 0; i<cvs.length; i++){
-            if(cvs[i].cvId==_cvId){
-                index= i;
+    function deleteCv (uint _cvId){  
+        for(uint i = 0; i<jobSeekerToCvs[msg.sender].length; i++){
+            if(jobSeekerToCvs[msg.sender][i]==_cvId){
+               delete jobSeekerToCvs[msg.sender][i];
+
+               for (uint m = i; m<jobSeekerToCvs[msg.sender].length-1; m++){
+                    jobSeekerToCvs[msg.sender][m] = jobSeekerToCvs[msg.sender][m+1];
+                }
+                delete jobSeekerToCvs[msg.sender][jobSeekerToCvs[msg.sender].length-1];
+                jobSeekerToCvs[msg.sender].length--;
+
+               break;
             }
         }
-        delete jobSeekerToCvs[msg.sender][index];
     }
     //===============job seeker CRUD operation on cvs ends================
 }
