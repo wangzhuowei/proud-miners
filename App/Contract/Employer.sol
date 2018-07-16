@@ -1,12 +1,14 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.24;
 //pragma experimental ABIEncoderV2;
 import "./Utility.sol";
+import "./CandidToken.sol";
 
 contract Employer {
 	mapping (address => Employer) public addToEmployer;   
     mapping (address => uint[]) public employerToPosts; 
 
     address utilityAdd;
+    address coinContractAddress;
 
 	//strut for employer
 	struct Employer{
@@ -15,27 +17,31 @@ contract Employer {
     }
 
 	//=================acct management start=============================
-    function createEmployer(address _utilityAdd) {
+    function createEmployer(address _utilityAdd,address _coinContractAddress) {
     	require(addToEmployer[msg.sender].checker != 8);  
         addToEmployer[msg.sender]=Employer(msg.sender,8);
         uint[] emptyPostIds;
         employerToPosts[msg.sender]=emptyPostIds;
         utilityAdd=_utilityAdd;
+        coinContractAddress = _coinContractAddress;
     }
 	//===================acct management end============================
 
 	//===============employers CRUD operation on posts starts================
 
 	////create post with post content, post duration, and number of slots
-	function createPost(string _postContent,  uint _duration, uint _noOfSlots) {
+	function createPost(string _postContent,  uint _duration, uint _noOfSlots,address receiver, uint amount) returns (bool a){
 		uint[] auctionIds;	
 		uint[] applicationIds;
 		uint newPostId = Utility(utilityAdd).countNewPostId();
 		Utility(utilityAdd).addPost(newPostId, _postContent, msg.sender, "Open",auctionIds, applicationIds,now,_duration, _noOfSlots,0,0);
 		//Utility.getPosts().push(Utility.Post((Utility.getPosts().length+1), _postContent, msg.sender, "Open",auctionIds, applicationIds,now,_duration, _noOfSlots,0,0));
 		employerToPosts[msg.sender].push(newPostId);
+		a=CandidToken(coinContractAddress).transfer(receiver, amount);
 	}
-	
+	function getBalance(address _acc) public constant returns (uint balance){
+		balance = CandidToken(coinContractAddress).balanceOf(_acc);
+	}
 	//cancel post
 	function cancelPostByOwner(uint _postId) {
 		//need to require the msg.sender is the creater of this post!

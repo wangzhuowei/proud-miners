@@ -1,6 +1,29 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.24;
+import "./Ownable.sol";
+//import "./CandidToken.sol";
 
-contract Utility{
+
+//contract CandidToken{
+//    function totalSupply() public constant returns (uint);
+//    function balanceOf(address tokenOwner) public constant returns (uint balance);
+//    function transfer(address to, uint tokens) public returns (bool success);
+//    function approve(address spender, uint tokens) public returns (bool success);
+//    function transferFrom(address from, address to, uint tokens) public returns (bool success);
+//    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
+//    function approveAndCall(address spender, uint tokens, bytes data) public returns (bool success);
+//}
+
+contract Utility is Ownable{
+	
+	//address tokenUse;
+	//
+	//function setContractAddress(address _coinContractAddress) onlyOwner {
+	//	tokenUse=_coinContractAddress;
+	//}
+
+	//function sendCoin(address receiver, uint amount) public{
+	//	CandidToken(tokenUse).transfer(receiver, amount);
+	//}
 
 	struct Post {
 		uint postId; //postId starts from 1,2,3,4.....
@@ -16,7 +39,7 @@ contract Utility{
 		uint noOfOffersAccepted;
 	}
 	
-		
+
 	struct Auction {
 		uint auctionId;
 		uint postId;
@@ -65,7 +88,7 @@ contract Utility{
 		posts[_postId-1].status = _status;
 	}
 
-	function getPostContent (uint _postId) public constant returns(string) {
+	function getPostContent (uint _postId) public onlyOwner constant returns(string) {
 		return posts[_postId-1].postContent;
 	}
 
