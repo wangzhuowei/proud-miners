@@ -5,6 +5,84 @@
 @import url('animate.css');
 
 /*===========================
+add my cv
+============================ */
+.add_cv_wrap {
+    background-color: #f1f1f1;
+    color: dimgray;
+    height: 900px;
+    width: 100%;
+}
+
+.add_cv_div {
+    float:left;
+    position:relative;
+    left:25px;
+    top:50px;
+    height:800px;
+    width:800px;
+    background-color:white;
+ 
+}
+/*===========================
+my cv
+============================ */
+.my_cv_tb {
+    background-color: #637bbc;
+    width: 870px;
+    display: block;
+	height:100px;
+   padding-top:5px;
+   padding-left:10px;
+}
+
+
+
+.my_cv_tb h3{
+	color:white;
+	
+}
+
+/*===========================
+notification
+============================ */
+
+
+.notification_box{
+    position: relative;
+    margin: 10px 10px 10px 10px;
+	top:5px;
+    background: white;
+    height: 120px;
+    border-style:solid;
+}
+.notif_del_btn{
+	
+	float:right;
+}
+
+
+/*===========================
+acc setting
+============================ */
+.acc_setting_div {
+    float: left;
+    position: relative;
+    left: 25px;
+    top: 50px;
+    height: 340px;
+    width: 804px;
+    background-color: white;
+	
+
+}
+
+.acc_setting_div p{
+	
+	color:black;
+}
+
+/*===========================
 Create Job Adv
 ============================ */
 .adv_part1 {
@@ -112,15 +190,14 @@ Login
 
 .l_container {
     padding: 16px;
+	
+	
 }
 
 span.psw {
     float: right;
     padding-top: 16px;
 }
-
-
-
 
 
 .login_wrap {
@@ -135,11 +212,10 @@ span.psw {
 	height:300px;
 	position:relative;
 	top:100px;
-	left:350px;
+	left:400px;
 	border-style:solid;
 	text-align:center;
-	
-	
+
 }
 .l_select{
 	padding: 14px 20px;
@@ -253,6 +329,7 @@ CV Update
     padding-left:50px;
 }
 .cv_update_inner_container p{
+	color:black;
     white-space:pre;
 }
 .cv_short_summary_updated_box {
@@ -315,6 +392,10 @@ padding-top:20px;
     width: 870px;
     display: block;
    
+}
+
+.da_cv_tb button{
+	float:right;
 }
 
 .da_cv_tb td{

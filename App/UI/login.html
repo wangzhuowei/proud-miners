@@ -39,7 +39,7 @@
 					<div class="menu">
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation"><a href="index.html" class="active">Home</a></li>
-                            <li role="presentation"><a href="JS_Acc_Overview.html">Login</a></li>
+                            <li role="presentation"><a href="JS_AccOverview.html">Login</a></li>
                             <li role="presentation"><a href="H_contact.html">Contact Us</a></li>
                         </ul>
 					</div>
@@ -49,25 +49,31 @@
     </header><!--/header-->	
 	
 	<div class="login_wrap">
-	<div class="register_panel">
-	<h2>Register Form</h2>
-	<br />
-	
-	 <form action="xx.php">
-                     
-                        <table class="register_tb">
-						<tr><td>First Name: <input type="text" required></td> <td>Last Name: <input type="text" required></td></tr>
-						<tr><td>Email:<input type="text" required></td></tr>
-						<tr><td>Password:<input type="text" required></td><td> Confirm Password:<input type="text" required></td></tr>
-						<tr><td>Nationality:<input type="text" required></td></tr>
-						<tr><td>Specification:<input type="text" required></td></tr>
-						<tr><td>Resides:<input type="text" required></td></tr>
-						<tr><td></td><td><input type="submit" value="Submit"></td></tr>
-						</table>
-						
-                  </form>
-	
+	<div class="login_panel">
+	<h2>Login Form</h2>
 
+<form action="/action_page.php">
+
+  <div class="l_container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" class="l_input" name="uname" required><br />
+
+    <label for="psw"><b>Password </b></label>
+    <input type="password" placeholder="Enter Password"class="l_input" name="psw" required><br />
+     <select class="l_select">
+	 <option selected>Job Seeker</option>
+	 <option>Recruiter</option>
+	 <option>Employer</option>
+	 </select>
+	 
+    <button class="l_button"type="submit">Login</button>
+  <br />
+  </div>
+
+ 
+   
+ 
+</form>
 	
 	</div>
 	

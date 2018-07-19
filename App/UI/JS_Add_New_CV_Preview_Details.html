@@ -31,16 +31,16 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                       </button>
-                     <a href="index.html"><img src="img/ci_logo.png" alt="Home" id="logo_pic"></a>
+                      <a href="index.html"><img src="img/ci_logo.png" alt="Home" id="logo_pic"></a>
                   </div>
                   <div class="menu_div">
                       <div class="menu">
                           <ul class="nav nav-tabs" role="tablist">
-                              <li role="presentation"><a href="E_Acc_Overview.html" class="active">Account Overview</a></li>
-                              <li role="presentation"><a href="E_Job_Board.html" >Job Board</a></li>
-                              <li role="presentation"><a href="E_RecList.html">Recruiter List</a></li>
+                              <li role="presentation"><a href="JS_Acc_Overview.html" class="active">Account Overview</a></li>
+                              <li role="presentation"><a href="JS_Job_Board.html" >Job Board</a></li>
+                              <li role="presentation"><a href="recruiterList.html">Recruiter List</a></li>
                               <li role="presentation"><a href="">Wallet</a></li>
-                              <li role="presentation"><a href="index.html">Sign Out</a></li> 
+                              <li role="presentation"><a href="index.html">Sign Out</a></li>
                           </ul>
                       </div>
                   </div>
@@ -49,25 +49,32 @@
       </header><!--/header-->
 
       <div class="cv_update_wrap">
-          <div>
-              <div class="side_nav">
+
+          <div class="side_nav">
               <table>
-                  <tr><td><a href="E_Update_Profile.html">Employer Profile </a></td></tr>
-				  <tr><td><a href="E_My_JobAdv.html" class="side_nav_active">My Job Adv</a></td></tr>
-                  <tr><td><a href="E_Create_JobAdv.html">Create Job Adv</a></td></tr>
-                  <tr><td><a href="#">My Favourite Recruiter??</a></td></tr>
-				  <tr><td><a href="E_Notification.html">Notfication</a></td></tr>
-                  <tr><td><a href="E_Acc_Setting.html">Account Setting</a></td></tr>
+                       <tr><td><a href="JS_CV_Preview.html" >My CV </a></td></tr>
+					  <tr><td><a href="JS_My_CV_Collection.html"class="side_nav_active">My CV Collection</a></td></tr>
+                      <tr><td><a href="">My Favorite Post</a></td></tr>
+                      <tr><td><a href="JS_My_Applications.html">My Applications</a></td></tr>
+                      <tr><td><a href="JS_Auction.html">My Auction</a></td></tr>
+                      <tr><td><a href="JS_Notification.html">Notification</a></td></tr>
+                      <tr><td><a href="JS_Acc_Setting.html">Account Setting</a></td></tr>
               </table>
+          </div>
+          
+          <div class="js_cv_wrap">
+              <div class="cv_btn_div">
+               <button onclick="window.location.href='JS_Add_New_CV_Preview_Details.html'" class="cv_info_btn">CV Preview</button>
+                  <button class="cv_info_btn" onclick="window.location.href='JS_Add_New_CV_Edu_Details.html'">Education</button>
+                  <button class="cv_info_btn" onclick="window.location.href='JS_Add_New_CV_Exp_Details.html'">Experience</button>
+                  <button class="cv_info_btn" onclick="window.location.href='JS_Add_New_CV_Skills_Details.html'">Skill</button>
+                  <button class="cv_info_btn" onclick="window.location.href='JS_Add_New_CV_Lanuage_Details.html'">Language</button>
+                  <button class="cv_info_btn" onclick="window.location.href='JS_Add_New_CV_About_Me_Details.html'">About Me</button>
               </div>
 
 
-          </div>
-		 
-		   
-		  
-		  
-              <div class="adv_panel">
+
+              <div class="js_cv_adv_panel">
                   <div class="adv_header">
 
                       <div class="js_jb_info">
@@ -79,17 +86,9 @@
 						  <p>Notice Period</p>
                     
                       </div>
-					  
-					  <table class="e_view_cv_tb">
-					<tr><td><button>Offer</button></td></tr>
-					<tr><td><button>Schedule Interview</button></td></tr>
-					<tr><td><button>Reject</button></td></tr>
-
-				</table>
 
 
                   </div>
-				  
                   <div class="adv_main">
                       <br />
 					  <h4>Skills</h4>
@@ -156,51 +155,58 @@
 
               </div>
 
-		   
+
+
+
           </div>
+             
 
 
 
+      </div>
+
+      
 
 
-          <div class="sub-footer">
-              <div class="container">
-                  <div class="social-icon">
-                      <div class="col-md-4">
-                          <ul class="social-network">
-                              <li><a href="#" class="fb tool-tip" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                              <li><a href="#" class="twitter tool-tip" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                              <li><a href="#" class="gplus tool-tip" title="Google Plus"><i class="fa fa-google-plus"></i></a></li>
-                              <li><a href="#" class="linkedin tool-tip" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
-                              <li><a href="#" class="ytube tool-tip" title="You Tube"><i class="fa fa-youtube-play"></i></a></li>
-                          </ul>
-                      </div>
+
+      <div class="sub-footer">
+          <div class="container">
+              <div class="social-icon">
+                  <div class="col-md-4">
+                      <ul class="social-network">
+                          <li><a href="#" class="fb tool-tip" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                          <li><a href="#" class="twitter tool-tip" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                          <li><a href="#" class="gplus tool-tip" title="Google Plus"><i class="fa fa-google-plus"></i></a></li>
+                          <li><a href="#" class="linkedin tool-tip" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+                          <li><a href="#" class="ytube tool-tip" title="You Tube"><i class="fa fa-youtube-play"></i></a></li>
+                      </ul>
                   </div>
+              </div>
 
-                  <div class="col-md-4 col-md-offset-4">
-                      <div class="copyright">
-                          &copy; Proud Miner 2018 by <a target="_blank" href="http://bootstraptaste.com/" title="Free Twitter Bootstrap WordPress Themes and HTML templates">Haonan</a>.All Rights Reserved.
-                      </div>
-                      <!--
+              <div class="col-md-4 col-md-offset-4">
+                  <div class="copyright">
+                      &copy; Proud Miner 2018 by <a target="_blank" href="http://bootstraptaste.com/" title="Free Twitter Bootstrap WordPress Themes and HTML templates">Haonan</a>.All Rights Reserved.
+                  </div>
+                  <!--
                     All links in the footer should remain intact.
                     Licenseing information is available at: http://bootstraptaste.com/license/
                     You can buy this theme without footer links online at: http://bootstraptaste.com/buy/?theme=Day
                 -->
-                  </div>
               </div>
           </div>
+      </div>
 
-          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-          <script src="js/jquery.js"></script>
-          <!-- Include all compiled plugins (below), or include individual files as needed -->
-          <script src="js/bootstrap.min.js"></script>
-          <script src="js/wow.min.js"></script>
-          <script>
-              wow = new WOW(
-                  {
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="js/jquery.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/wow.min.js"></script>
+      <script>
+          wow = new WOW(
+              {
 
-                  })
-                  .init();
-          </script>
-</body>
+              })
+              .init();
+      </script>
+  </body>
 </html>

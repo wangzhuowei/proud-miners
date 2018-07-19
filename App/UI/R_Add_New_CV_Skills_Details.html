@@ -43,17 +43,18 @@
                               <li role="presentation"><a href="H_contact.html">Contact Us</a></li>
                           </ul>
                       </div>
+                      </div>
                   </div>
               </div><!--/.container-->
           </nav><!--/nav-->
       </header><!--/header-->
 
-      <div class="cv_update_wrap">
+      <div class="add_cv_wrap">
 
           <div class="side_nav">
               <table>
-                  <tr><td><a href="R_Update_Profile.html" class="side_nav_active">Recruiter Profile</a></td></tr>
-                  <tr><td><a href="R_My_CV_Collection.html">My CV Collection</a></td></tr>
+                  <tr><td><a href="R_Update_Profile.html">Recruiter Profile</a></td></tr>
+                  <tr><td><a href="R_My_CV_Collection.html"class="side_nav_active">My CV Collection</a></td></tr>
                   <tr><td><a href="">Favorite Post</a></td></tr>
                   <tr><td><a href="R_Auction.html">My Auctions</a></td></tr>
                   <tr><td><a href="R_Notification.html">Notification</a></td></tr>
@@ -61,29 +62,43 @@
               </table>
           </div>
 
-		
-          <div class="cv_skill_update_div">
-              
-          
 
+          
+          <div class="cv_skill_update_div">
+              <div class="cv_btn_div">
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_Preview_Details.html'">CV Preview</button>
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_Edu_Details.html'">Education</button>
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_Exp_Details.html'">Experience</button>
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_Skills_Details.html'">Skill</button>
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_Lanuage_Details.html'">Language</button>
+                  <button class="cv_info_btn" onclick="window.location.href='R_Add_New_CV_About_me_Details.html'">About Me</button>
+              </div>
+			
               <div class="cv_update_inner_container">
-                  <h3>About Me</h3>
-                  <h5>Display your personal information:</h5>
+                  <h3>Skills</h3>
+                  <h5>Display your skills here:</h5>
                   <br />
                   <div>
-                      <p>                     Name: Recruiter Luo</p>
-                      <p>               About Me: Have been working closely with MNC HR companies in Oil &amp; gas</p>
-                      <p>               Speciality: e.g oil &amp; gas, finance – accounts (drop down box percentage)</p>
-                      <p>           Experience: Looking for jobs</p>
-                      <p>        Qualification: Bsc in Psychology</p>
-					  <p>Contact Number: 1234567</p>
+                      <p>Advacned: <button>Java</button> , <button>Photoshop</button></p>
+                      <p>Intermediate: <button>C++</button></p>
+                      <p>Beginner: <button>HTML</button></p>
                   </div>
-
-                 
+                  <hr />
                   <br />
-                 <button onclick="window.location.href='R_Updating_Profile.html'">Edit</button>
+                  <div class="add_skill_div">
+                      <form action="edu_update.php">
+                          <input type="text" name="skills">
+                          <select>
+                              <option value="adv">Advanced</option>
+                              <option value="inter">Intermediate</option>
+                              <option value="beginner">Beginner</option>
+                          </select>
 
 
+                          <input type="submit" value="Add Skill">
+                      </form>
+
+                  </div>
 
               </div>
              
@@ -91,15 +106,15 @@
           </div>
 
 
+
       </div>
-	  
-	  
-	  
+
+      
 
 
 
       <div class="sub-footer">
-          <div class="h_container">
+          <div class="container">
               <div class="social-icon">
                   <div class="col-md-4">
                       <ul class="social-network">

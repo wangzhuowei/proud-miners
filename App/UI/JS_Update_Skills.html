@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/animate.css">
 	<link href="css/animate.min.css" rel="stylesheet"> 
-	<link href="css/style.css" rel="stylesheet" />	
+	<link href="css/style.css" rel="stylesheet" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -36,12 +36,11 @@
                   <div class="menu_div">
                       <div class="menu">
                           <ul class="nav nav-tabs" role="tablist">
-                              <li role="presentation"><a href="E_AccOverview.html" class="active">Account Overview</a></li>
-                              <li role="presentation"><a href="E_JobBoard.html" >Job Board</a></li>
-                              <li role="presentation"><a href="E_RecList.html">Recruiter List</a></li>
+                              <li role="presentation"><a href="JS_Acc_Overview.html" class="active">Account Overview</a></li>
+                              <li role="presentation"><a href="JS_Job_Board.html" >Job Board</a></li>
+                              <li role="presentation"><a href="recruiterList.html">Recruiter List</a></li>
                               <li role="presentation"><a href="">Wallet</a></li>
                               <li role="presentation"><a href="index.html">Sign Out</a></li>
-                              <li role="presentation"><a href="H_contact.html">Contact Us</a></li>
                           </ul>
                       </div>
                   </div>
@@ -49,25 +48,76 @@
           </nav><!--/nav-->
       </header><!--/header-->
 
-      <div class="wrap">
+      <div class="cv_update_wrap">
 
           <div class="side_nav">
               <table>
-                  <tr><td><a href="#">Profile </a></td></tr>
-                  <tr><td><a href="#">Create Job Adv</a></td></tr>
-                  <tr><td><a href="E_My_JobAdv.html">My Job Adv</a></td></tr>
-                  <tr><td><a href="#">My Favourite Recruiter??</a></td></tr>
-                  <tr><td><a href="#">Account Setting</a></td></tr>
+                       <tr><td><a href="JS_CV_Preview.html"class="side_nav_active">My CV </a></td></tr>
+					  <tr><td><a href="JS_My_CV_Collection.html" >My CV Collection</a></td></tr>
+                      <tr><td><a href="">My Favorite Post</a></td></tr>
+                      <tr><td><a href="JS_My_Applications.html">My Applications</a></td></tr>
+                      <tr><td><a href="JS_Auction.html">My Auction</a></td></tr>
+                      <tr><td><a href="JS_Notification.html">Notification</a></td></tr>
+                      <tr><td><a href="JS_Acc_Setting.html">Account Setting</a></td></tr>
               </table>
           </div>
 
 
+          
+          <div class="cv_skill_update_div">
+              
+              <div class="cv_btn_div">
+                  <button onclick="window.location.href='JS_CV_Preview.html'" class="cv_info_btn">CV Preview</button>
+                  <button onclick="window.location.href='JS_Update_Edu.html'" class="cv_info_btn">Education</button>
+                  <button onclick="window.location.href='JS_Update_Exp.html'" class="cv_info_btn">Experience</button>
+                  <button onclick="window.location.href='JS_Update_Skills.html'" class="cv_info_btn">Skill</button>
+                  <button onclick="window.location.href='JS_Update_Lanuage.html'" class="cv_info_btn">Language</button>
+                  <button onclick="window.location.href='JS_Update_About_me.html'" class="cv_info_btn">About Me</button>
+              </div>
+
+              <div class="cv_update_inner_container">
+                  <h3>Skills</h3>
+                  <h5>Display your skills here:</h5>
+                  <br />
+                  <div>
+                      <p>Advacned: <button>Java</button> , <button>Photoshop</button></p>
+                      <p>Intermediate: <button>C++</button></p>
+                      <p>Beginner: <button>HTML</button></p>
+                  </div>
+                  <hr />
+                  <br />
+                  <div class="add_skill_div">
+                      <form action="edu_update.php">
+                          <input type="text" name="skills">
+                          <select>
+                              <option value="adv">Advanced</option>
+                              <option value="inter">Intermediate</option>
+                              <option value="beginner">Beginner</option>
+                          </select>
+
+
+                          <input type="submit" value="Add Skill">
+                      </form>
+
+                  </div>
+
+
+
+              </div>
+             
+
+          </div>
+
+
+
       </div>
+
+      
 
 
 
       <div class="sub-footer">
-          <div class="h_container">
+          <div class="container">
               <div class="social-icon">
                   <div class="col-md-4">
                       <ul class="social-network">

@@ -13,6 +13,8 @@
 	<link rel="stylesheet" href="css/animate.css">
 	<link href="css/animate.min.css" rel="stylesheet"> 
 	<link href="css/style.css" rel="stylesheet" />	
+		<link href="css/elements.css" rel="stylesheet">
+	<script src="js/my_js.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -36,11 +38,11 @@
                   <div class="menu_div">
                       <div class="menu">
                           <ul class="nav nav-tabs" role="tablist">
-                              <li role="presentation"><a href="R_AccOverview.html" class="active">Account Overview</a></li>
-                              <li role="presentation"><a href="R_JobBoard.html" >Job Board</a></li>
+                              <li role="presentation"><a href="JS_Acc_Overview.html" class="active">Account Overview</a></li>
+                              <li role="presentation"><a href="JS_Job_Board.html">Job Board</a></li>
+                              <li role="presentation"><a href="recruiterList.html">Recruiter List</a></li>
                               <li role="presentation"><a href="">Wallet</a></li>
-                              <li role="presentation"><a href="">Sign Out</a></li>
-                              <li role="presentation"><a href="H_contact.html">Contact Us</a></li>
+                              <li role="presentation"><a href="index.html">Sign Out</a></li>
                           </ul>
                       </div>
                   </div>
@@ -48,53 +50,69 @@
           </nav><!--/nav-->
       </header><!--/header-->
 
-      <div class="cv_update_wrap">
+      <div class="wrap">
 
           <div class="side_nav">
-              <table>
-                  <tr><td><a href="R_Update_Profile.html" class="side_nav_active">Recruiter Profile</a></td></tr>
-                  <tr><td><a href="R_My_CV_Collection.html">My CV Collection</a></td></tr>
-                  <tr><td><a href="">Favorite Post</a></td></tr>
-                  <tr><td><a href="R_Auction.html">My Auctions</a></td></tr>
-                  <tr><td><a href="R_Notification.html">Notification</a></td></tr>
-                  <tr><td><a href="R_Acc_Setting.html">Account Setting</a></td></tr>
+                <table>
+                       <tr><td><a href="JS_CV_Preview.html">My CV </a></td></tr>
+					  <tr><td><a href="JS_My_CV_Collection.html" class="side_nav_active">My CV Collection</a></td></tr>
+                      <tr><td><a href="">My Favorite Post</a></td></tr>
+                      <tr><td><a href="JS_My_Applications.html">My Applications</a></td></tr>
+                      <tr><td><a href="JS_Auction.html">My Auction</a></td></tr>
+                      <tr><td><a href="JS_Notification.html">Notification</a></td></tr>
+                      <tr><td><a href="JS_Acc_Setting.html">Account Setting</a></td></tr>
               </table>
           </div>
-
+		  
+		  		  <div id="abc">
+<!-- Popup Div Starts Here -->
+<div id="popupContact">
+<!-- Contact Us Form -->
+<form action="#" id="form" method="post" name="form">
+<button id="close"  onclick ="div_hide()">X</button>
+<h2>Add New CV</h2>
+<hr>
+<input id="industry" name="industry" placeholder="Industry" type="text">
+<input id="cv_info" name="CV Information" placeholder="CV Information" type="text">
+<br />
+<a href="JS_Add_New_CV_Edu_Details.html" id="submit">Next</a>
+</form>
+</div>
+<!-- Popup Div Ends Here -->
+</div>
 		
-          <div class="cv_skill_update_div">
-              
-          
-
-              <div class="cv_update_inner_container">
-                  <h3>About Me</h3>
-                  <h5>Display your personal information:</h5>
-                  <br />
-                  <div>
-                      <p>                     Name: Recruiter Luo</p>
-                      <p>               About Me: Have been working closely with MNC HR companies in Oil &amp; gas</p>
-                      <p>               Speciality: e.g oil &amp; gas, finance – accounts (drop down box percentage)</p>
-                      <p>           Experience: Looking for jobs</p>
-                      <p>        Qualification: Bsc in Psychology</p>
-					  <p>Contact Number: 1234567</p>
-                  </div>
-
-                 
-                  <br />
-                 <button onclick="window.location.href='R_Updating_Profile.html'">Edit</button>
-
+		
+              <div class="my_appl_panel">
+               
+                        
+                           <div class="da_cs_panel">
+						   
+						   
+                               <div class="da_tb_div">
+							   
+							   <div class="my_cv_tb">
+							   <h3>My CV Collection</h3>
+							   <button id="popup" onclick="div_show()">Add a CV</button>
+							   </div>
+			    
+								   
+								   <table class="da_cv_tb">
+                                    
+									<tr><td><br /></td></tr>
+                                       <tr><td><a href="E_View_CV.html">Industry, CV_information , Submission Date</a><button>X</button><br /><hr /></td></tr>
+                                       <tr><td><a href="E_View_CV.html">Industry, CV_information , Submission Date</a><button>X</button><br /><hr /></td></tr>
+                                       <tr><td><a href="E_View_CV.html">Industry, CV_information , Submission Date</a><button>X</button><br /><hr /></td></tr>
+                                       <tr><td><a href="E_View_CV.html">Industry, CV_information , Submission Date</a><button>X</button><br /><hr /></td></tr>
+                                   </table>
+                               </div> 
+                           </div>
 
 
               </div>
-             
 
-          </div>
-
-
+		  
+		  
       </div>
-	  
-	  
-	  
 
 
 
